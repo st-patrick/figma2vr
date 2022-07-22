@@ -14,4 +14,20 @@ document.getElementById('cancel').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
 }
 
+
+window.onmessage = async (event) => {
+  if (event.data.pluginMessage.type === 'networkRequest') {
+    var request = new XMLHttpRequest()
+    // This link has random lorem ipsum text
+    request.open('GET', 'https://api.figma.com/v1/images/4PBBD2a0bHiYUr6BkjmWIw?ids=11757:54965&scale=4&format=jpg')
+    request.responseType = 'json';
+    request.setRequestHeader('X-FIGMA-TOKEN', 'figd_yLeSkacWJ_PEvHJvk9Dp0V20a688L81ia9cWPP3X');
+    request.onload = () => {
+      console.log(request.response)
+      window.parent.postMessage({pluginMessage: request.response}, '*')
+    };
+    request.send()
+  }
+}
+
 </script>

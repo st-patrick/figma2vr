@@ -8,10 +8,25 @@
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
 
+figma.ui.postMessage({ type: 'networkRequest' });
+
+figma.ui.onmessage = async (msg) => {
+  const text = figma.createText()
+  // Make sure the new text node is visible where we're currently looking
+  text.x = figma.viewport.center.x
+  text.y = figma.viewport.center.y
+
+  await figma.loadFontAsync(text.fontName as FontName)
+  text.characters = msg
+
+  figma.closePlugin()
+}
+
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the
 // posted message.
-figma.ui.onmessage = msg => {
+/*
+figma.ui.onmessage = async (msg) => {
 
     let api_key = 'figd_yLeSkacWJ_PEvHJvk9Dp0V20a688L81ia9cWPP3X';
     let format = 'jpg';
@@ -25,8 +40,22 @@ figma.ui.onmessage = msg => {
       node_id = node.id
       console.log(node_id);
 
-      let request = `https://api.figma.com/v1/images/${file_key}?ids=${node_id}&scale=4&format=jpg`;
+      const url=`https://api.figma.com/v1/images/${file_key}?ids=${node_id}&scale=4&format=jpg`;
+      const headerDict = {
+        'X-FIGMA-TOKEN': 'figd_yLeSkacWJ_PEvHJvk9Dp0V20a688L81ia9cWPP3X'
+      }
+      
+      console.log(
+        this.http.get(url, {                                                                                                                                                                                 
+          headers: headerDict, 
+        })
+      );
+
     }
+
+
+
     figma.closePlugin();
   
 };
+*/
