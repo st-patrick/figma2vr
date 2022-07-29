@@ -8,17 +8,21 @@
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
 
-let node_ids = [];
+let nodes = {};
+console.log("inspect node selection -------");
 for (const node of figma.currentPage.selection) {
-  node_ids.push(node.id);
+  nodes[node.id] = {
+    x: node.x,
+    y: node.y,
+    width: node.width,
+    height: node.height
+  };
 }
+console.log(nodes);
 
-figma.ui.postMessage({ type: 'networkRequest', node_ids: node_ids });
+figma.ui.postMessage({ type: 'networkRequest', nodes_details: {...nodes}});
 
 figma.ui.onmessage = async (msg) => {
-
-  console.log(msg);
-
   figma.closePlugin()
 }
 

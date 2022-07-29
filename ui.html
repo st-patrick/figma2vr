@@ -20,9 +20,7 @@ window.onmessage = async (event) => {
 
   if (event.data.pluginMessage.type === 'networkRequest') {
 
-
-    let node_ids = event.data.pluginMessage.node_ids;
-    console.log(node_ids);
+    let nodes_details = event.data.pluginMessage.nodes_details;
 
     let file_key = '4PBBD2a0bHiYUr6BkjmWIw';
     const headerDict = {
@@ -31,15 +29,13 @@ window.onmessage = async (event) => {
 
     // concatenate ids for request url
     let id_list = "";
-    for (let i = 0; i < node_ids.length - 1; i++) {
-      id_list += node_ids[i] + ",";
+    for (let id in nodes_details) {
+      id_list += id + ",";
     }
-    id_list += node_ids[node_ids.length-1];
+    id_list = id_list.slice(0, -1) // remove last comma
     
     const url=`https://api.figma.com/v1/images/${file_key}?ids=${id_list}&scale=4&format=png`;
-    console.log(
-      url
-    );
+
 
     // store those IDs or URLs or whatever on npoint
     let storage_url = 'https://api.npoint.io/b90e9921c9d895f626c7';
@@ -62,15 +58,15 @@ window.onmessage = async (event) => {
     request.responseType = 'json';
     request.setRequestHeader('X-FIGMA-TOKEN', 'figd_yLeSkacWJ_PEvHJvk9Dp0V20a688L81ia9cWPP3X');
     request.onload = () => {
-      console.log("here come the IMAGES");
-      for(let node_id in request.response.images) {
-        let imgurl = request.response.images[node_id];
+      for(let id in nodes_details) {
+        let imgurl = request.response.images[id];
         console.log(imgurl);
-        imgurls.push(imgurl);
+        nodes_details[id]["url"] = imgurl;
       }
 
-      console.log(JSON.stringify(request.response.images));
-      storage_request.send(JSON.stringify(request.response.images));
+      console.log(nodes_details);
+      storage_request.send(JSON.stringify(nodes_details));
+
     };
     request.send();
   }
