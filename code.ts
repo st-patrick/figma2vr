@@ -8,19 +8,22 @@
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
 
-figma.ui.postMessage({ type: 'networkRequest' });
+let node_ids = [];
+for (const node of figma.currentPage.selection) {
+  node_ids.push(node.id);
+}
+
+figma.ui.postMessage({ type: 'networkRequest', node_ids: node_ids });
 
 figma.ui.onmessage = async (msg) => {
-  const text = figma.createText()
-  // Make sure the new text node is visible where we're currently looking
-  text.x = figma.viewport.center.x
-  text.y = figma.viewport.center.y
 
-  await figma.loadFontAsync(text.fontName as FontName)
-  text.characters = msg
+  console.log(msg);
 
   figma.closePlugin()
 }
+
+
+
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the
