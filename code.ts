@@ -10,15 +10,16 @@ figma.showUI(__html__);
 
 let nodes = {};
 console.log("inspect node selection -------");
+console.log(figma.currentPage.selection);
+// TODO get total size of frame for scaling (here fullHD)
 for (const node of figma.currentPage.selection) {
   nodes[node.id] = {
     x: node.x,
     y: node.y,
-    width: node.width,
-    height: node.height
+    width: node.absoluteRenderBounds.width,
+    height: node.absoluteRenderBounds.height
   };
 }
-console.log(nodes);
 
 figma.ui.postMessage({ type: 'networkRequest', nodes_details: {...nodes}});
 
