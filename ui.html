@@ -1,18 +1,7 @@
-<h2>Rectangle Creator</h2>
-<p>Count: <input id="count" value="5"></p>
-<button id="create">Create</button>
-<button id="cancel">Cancel</button>
+<h2>Figma2VR</h2>
+<p>Please wait until this window closes. If it doesn't close within 1 minute, click the x and re-launch the plugin.</p>
+<p>after, the result will be available at <a href="https://figma2vr.patrickreinbold.com">figma2vr.patrickreinbold.com</a></p>
 <script>
-
-document.getElementById('create').onclick = () => {
-  const textbox = document.getElementById('count');
-  const count = parseInt(textbox.value, 10);
-  parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
-}
-
-document.getElementById('cancel').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
-}
 
 
 
